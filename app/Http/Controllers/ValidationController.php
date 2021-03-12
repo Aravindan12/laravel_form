@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SendEmailTest;
 use App\Mail\MailNotify;
+use App\Jobs\SendEmailJob;
 
 class ValidationController extends Controller
 {
@@ -62,14 +63,8 @@ class ValidationController extends Controller
                 else{
                    
                     $this->userreg->create($request->all());
-                    $data = array('name'=>"Virat Gandhi");
-   
-                    Mail::send(['text'=>'email'], $data, function($message) {
-                    $message->to('aravindkumaranakr@gmail.com', 'Tutorials Point')->subject
-                    ('Laravel Basic Testing Mail');
-                    $message->from('rubanshanthi24@gmail.com','Virat Gandhi');
-                    });
-                    echo "Basic Email Sent. Check your inbox.";
+                    $details = new SendEmailJob($request->all());
+                    dispatch($details);
                     // Mail::to('aravindkumaranakr@gmail.com')->send(new SendEmailTest());
                     return redirect('/home')->with('success','Customer Added Successfully');
                  

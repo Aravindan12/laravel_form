@@ -25,8 +25,9 @@ Route::get('/login', 'ValidationController@loginPage')->name('login');
 Route::post('post-login', 'ValidationController@loginForm')->name('auth');
 Route::get('/home', 'ValidationController@homePage')->name('home')->middleware('admin');
 Route::get('/logout','ValidationController@logOut')->name('logout');
-Route::get('/email', function(){
+// Route::get('/email', function(){
     
-    // Mail::to('aravindkumaranakr@gmail.com')->send(new SendEmailTest());
-	return new SendEmailTest();
-});
+//     // Mail::to('aravindkumaranakr@gmail.com')->send(new SendEmailTest());
+// 	return new SendEmailTest();
+//     // User::find(1)->notify(new newNotification);
+// });

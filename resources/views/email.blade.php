@@ -7,6 +7,9 @@
     <title>Document</title>
 </head>
 <body>
-    hi
+    <p>This is your username {{$name}}<br>
+    This is your password {{$password}}
+    </p>
+    <a href = "http://localhost:8000/login">login here</a>
 </body>
 </html>

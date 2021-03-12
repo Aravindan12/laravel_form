@@ -28,6 +28,7 @@ class SendEmailTest extends Mailable
      */
     public function build()
     {
-        return $this->view('email');
+        return $this->from('example@example.com')
+                ->view('emails.orders.shipped');
     }
 }
