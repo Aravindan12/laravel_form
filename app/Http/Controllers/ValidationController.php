@@ -143,8 +143,9 @@ class ValidationController extends Controller
             
            $password = $request->password;
         //    $foo = false;
-           $id = $request->id;
-           dd($id);
+        //    $id = $request->id;
+           $page=Page::find($id);
+           dd($page);
         DB::table('userreg')->update(array('password' => $password,'confirm_password'=> $password))->where('id',$id);
         
         

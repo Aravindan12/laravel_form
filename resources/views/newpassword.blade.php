@@ -22,7 +22,7 @@
 		@endif
         <?php $token = csrf_token();?>
         <div class="form-group">
-            <input type="hidden" value="{{$token}}" name="name">
+            <input type="hidden" value="" name="name">
             <div class="form-group">
     <div class="form-group">
     <label>Password</label>
