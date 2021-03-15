@@ -37,6 +37,7 @@
     <button class="btn btn-success">Submit</button>
     </div>
     <p>If you are new please<a href="/register"> register here</a></p>
+    <a href = "/forgot">forget password?</a>
     <form>
 </body>
 </html>

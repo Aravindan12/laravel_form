@@ -6,14 +6,18 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Page;
 use Session;
+use Illuminate\Support\Facades\DB;
+
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SendEmailTest;
 use App\Mail\MailNotify;
 use App\Jobs\SendEmailJob;
+use App\Jobs\SendEmails;
 
 class ValidationController extends Controller
 {
@@ -34,6 +38,13 @@ class ValidationController extends Controller
     }
     public function loginPage(){
         return view('login');
+    }
+    public function forGot(){
+        return view('forgot');
+    }
+    public function setpassword(){
+        
+        return view('newPassword');
     }
     public function logOut(){
         Session::flush();
@@ -103,4 +114,42 @@ class ValidationController extends Controller
             
        
 }
+    public function forgotPassword(Request $request){
+
+    $user = $this->userreg->where('email',$request->email)->first();
+    
+    if(isset($user)){
+        $detail = new SendEmails($request->all());
+        // dd($detail);
+        dispatch($detail);
+        return redirect('/login')->with('success','Login Successfully');
+    }else{
+        return back()->with('error','Invalid Login Credentials');
+    }
+}
+    public function newPassword(Request $request,$id){
+        $this->validate($request,[
+            
+
+            'password' => 'required|min:5|max:10',
+            'password1' => 'required|min:5|max:10|same:password'
+
+            ],[
+                
+                'password.required' => ' The last name field is required.',
+                'password.min' => ' The last name must be at least 5 characters.',
+                'password.max' => ' The last name may not be greater than 35 characters.',
+            ]);
+            
+           $password = $request->password;
+        //    $foo = false;
+           $id = $request->id;
+           dd($id);
+        DB::table('userreg')->update(array('password' => $password,'confirm_password'=> $password))->where('id',$id);
+        
+        
+            return redirect('/login');
+        
+           
+    }
 }

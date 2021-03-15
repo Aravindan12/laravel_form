@@ -9,23 +9,20 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Mail;
 
-class SendEmailJob implements ShouldQueue
+class SendEmails implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    protected $details;
-    
-    
+    protected $detail;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($detail)
     {
         //
-        $this->details = $details;
-        // dd($details);
-
+        $this->detail  = $detail;
+        //  dd($this->detail);
     }
 
     /**
@@ -35,23 +32,22 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
+        //
+        $user_data1 = $this->detail;
+        // dd($user_data1);
 
-        $user_data = $this->details;
-        // dd($user_data);
         
-        $users=array('email' => $user_data['email'],'name'=> $user_data['name'],'password'=>$user_data['password']);
+        $user1=array('email' => $user_data1['email']);
+        // dd($user1);
+        if($user1){
         
-        
-        Mail::send('email',$users,function($message)use($user_data) {
-        $message->to($user_data['email'],$user_data['name'])->subject('Testing Email');
+        Mail::send('forgotemail',$user1,function($message)use($user_data1) {
+        $message->to($user_data1['email'])->subject('Testing Email');
         $message->from('rubanshanthi24@gmail.com', 'Testing App');
+        
     });
-       
-            
-    }
-       
-        
-        
-
+}else{
+    dd('poda');
 }
-
+    }
+}

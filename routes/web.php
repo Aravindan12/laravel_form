@@ -25,6 +25,10 @@ Route::get('/login', 'ValidationController@loginPage')->name('login');
 Route::post('post-login', 'ValidationController@loginForm')->name('auth');
 Route::get('/home', 'ValidationController@homePage')->name('home')->middleware('admin');
 Route::get('/logout','ValidationController@logOut')->name('logout');
+Route::get('/forgot','ValidationController@forGot')->name('forgot');
+Route::post('forgot-password','ValidationController@forgotPassword')->name('forgotpassword');
+Route::get('/setpassword','ValidationController@setPassword')->name('setpassword');
+Route::post('new-password','ValidationController@newPassword')->name('newpassword');
 // Route::get('/email', function(){
     
 //     // Mail::to('aravindkumaranakr@gmail.com')->send(new SendEmailTest());
