@@ -9,6 +9,6 @@
 <body>
 <p> To create a new password<br>click the button down below
     </p>
-    <a href = "http://localhost:8000/setpassword>set here</a>
+    <a href = "http://localhost:8000/setpassword/{{$email}}">set here</a>
 </body>
 </html>

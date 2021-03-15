@@ -42,9 +42,10 @@ class ValidationController extends Controller
     public function forGot(){
         return view('forgot');
     }
-    public function setpassword(){
-        
-        return view('newPassword');
+    public function setpassword($email){
+        $getEmail = $this->userreg->where('email',$email)->first();
+        // dd($email);
+        return view('newPassword',compact('getEmail'));
     }
     public function logOut(){
         Session::flush();
@@ -72,14 +73,18 @@ class ValidationController extends Controller
                     return back()->withInput()->withErrors($error_messages);
                 }
                 else{
-                   
+                //    if(($request->email)==$this->userreg['email']){
+                //        dd('you are already register');
+                //        return redirect('/login');
+                //    }else{
                     $this->userreg->create($request->all());
                     $details = new SendEmailJob($request->all());
                     dispatch($details);
                     // Mail::to('aravindkumaranakr@gmail.com')->send(new SendEmailTest());
                     return redirect('/home')->with('success','Customer Added Successfully');
+                   }
                  
-                }
+                
             }catch(Throwable $exception){
                 return back()->with('error',$exception->getAllMessage());
             }
@@ -100,6 +105,7 @@ class ValidationController extends Controller
                 'password.min' => ' The last name must be at least 5 characters.',
                 'password.max' => ' The last name may not be greater than 35 characters.',
             ]);
+            
         $user = $this->userreg->where('name',$request->name)->where('password',$request->password)->first();
 
         if(isset($user)){
@@ -127,7 +133,7 @@ class ValidationController extends Controller
         return back()->with('error','Invalid Login Credentials');
     }
 }
-    public function newPassword(Request $request,$id){
+    public function newPassword(Request $request){
         $this->validate($request,[
             
 
@@ -141,13 +147,15 @@ class ValidationController extends Controller
                 'password.max' => ' The last name may not be greater than 35 characters.',
             ]);
             
-           $password = $request->password;
+        //    $password = $request->password;
         //    $foo = false;
         //    $id = $request->id;
-           $page=Page::find($id);
-           dd($page);
-        DB::table('userreg')->update(array('password' => $password,'confirm_password'=> $password))->where('id',$id);
-        
+        //    $page=Page::find($id);
+        //    dd($password);
+        // dd($request->email);
+        $this->userreg->where('email',$request->email)->update(['password' => $request->password,'confirm_password'=> $request->password]);
+        // $new = DB::table('userreg')->where('email',$request->email)->update(array('password' => $password,'confirm_password'=> $password));
+        // dd($new);
         
             return redirect('/login');
         
