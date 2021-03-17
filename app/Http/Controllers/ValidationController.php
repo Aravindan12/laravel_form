@@ -9,6 +9,8 @@ use Session;
 use Illuminate\Support\Facades\DB;
 
 
+
+
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Validator;
@@ -54,6 +56,19 @@ class ValidationController extends Controller
     public function validateForm(Request $request){
    
              try{
+                $user['email'] = request()->get('email');
+
+                // Must not already exist in the `email` column of `users` table
+                $rules = array('email' => 'unique:userreg,email');
+                $validator1 = Validator::make($user, $rules);
+                if ($validator1->fails()) {
+                    echo 'That email address is already registered. You sure you don\'t have an account?';
+                    return redirect('/login')->with('success','Customer Added Successfully');
+                    
+                }
+                else {
+                    // Register the new user or whatever.
+                
                 $validator = Validator::make($request->all(), [
                     'name' => 'required|min:5|max:30',
                     'email' => 'required|email|unique:users',
@@ -67,23 +82,23 @@ class ValidationController extends Controller
                         'password.min' => ' The last name must be at least 5 characters.',
                         'password.max' => ' The last name may not be greater than 35 characters.',
                     ]);
-              
+                    
+                    }
                 if ($validator->fails()) {
                     $error_messages = implode(',', $validator->messages()->all());
                     return back()->withInput()->withErrors($error_messages);
                 }
                 else{
-                //    if(($request->email)==$this->userreg['email']){
-                //        dd('you are already register');
-                //        return redirect('/login');
-                //    }else{
+                   
+             
                     $this->userreg->create($request->all());
                     $details = new SendEmailJob($request->all());
                     dispatch($details);
+                    toastr()->success('We sent you a email for successfully registered.Login here');
                     // Mail::to('aravindkumaranakr@gmail.com')->send(new SendEmailTest());
-                    return redirect('/home')->with('success','Customer Added Successfully');
-                   }
-                 
+                    return redirect('/login')->with('success','Customer Added Successfully');
+                   
+                }
                 
             }catch(Throwable $exception){
                 return back()->with('error',$exception->getAllMessage());
@@ -111,7 +126,7 @@ class ValidationController extends Controller
         if(isset($user)){
             Session::put('id',$user->id);
             Session::put('name',$user->name);
-            
+            toastr()->success('Login Success');
             return redirect('/home')->with('success','Login Successfully');
         }else{
             return back()->with('error','Invalid Login Credentials');

@@ -26,6 +26,7 @@ Route::post('post-login', 'ValidationController@loginForm')->name('auth');
 Route::get('/home', 'ValidationController@homePage')->name('home')->middleware('admin');
 Route::get('/logout','ValidationController@logOut')->name('logout');
 Route::get('/forgot','ValidationController@forGot')->name('forgot');
+Route::get('/sent','ValidationController@sentEmail')->name('sent');
 Route::post('forgot-password','ValidationController@forgotPassword')->name('forgotpassword');
 Route::get('/setpassword/{email}','ValidationController@setPassword')->name('setpassword');
 Route::post('new-password','ValidationController@newPassword')->name('newpassword');
