@@ -44,6 +44,9 @@ class ValidationController extends Controller
     public function forGot(){
         return view('forgot');
     }
+    public function sentEmail(){
+        return view('sentemail');
+    }
     public function setpassword($email){
         $getEmail = $this->userreg->where('email',$email)->first();
         // dd($email);
@@ -143,7 +146,7 @@ class ValidationController extends Controller
         $detail = new SendEmails($request->all());
         // dd($detail);
         dispatch($detail);
-        return redirect('/login')->with('success','Login Successfully');
+        return redirect('/sent')->with('success','Login Successfully');
     }else{
         return back()->with('error','Invalid Login Credentials');
     }
@@ -171,7 +174,7 @@ class ValidationController extends Controller
         $this->userreg->where('email',$request->email)->update(['password' => $request->password,'confirm_password'=> $request->password]);
         // $new = DB::table('userreg')->where('email',$request->email)->update(array('password' => $password,'confirm_password'=> $password));
         // dd($new);
-        
+            toastr()->success('Password resettes successfully you can login now with new password');
             return redirect('/login');
         
            
